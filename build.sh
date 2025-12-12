@@ -303,6 +303,12 @@ if [[ "$IS_WINDOWS" == "true" && "$USE_NINJA" == "ON" ]]; then
 		exit 1
 	fi
 
+	VS_HOST_ARCH="amd64"
+	VS_TARGET_ARCH="amd64"
+	if [[ "$TARGET_ARCH" == "aarch64" ]]; then
+		VS_TARGET_ARCH="arm64"
+	fi
+
 	# build command for cmd.exe execution
 	VSDEVCMD="$(cygpath -d "${VS_PATH}")/Common7/Tools/vsdevcmd.bat"
 	CMAKE_CMD="cmake ${CMAKE_ARGS[*]}"
@@ -310,8 +316,8 @@ if [[ "$IS_WINDOWS" == "true" && "$USE_NINJA" == "ON" ]]; then
 	BUILD_CMD="cmake --build build --parallel"
 	INSTALL_CMD="cmake --install build"
 
-	FULL_COMMAND=("$COMSPEC" "//c" "${VSDEVCMD} -no_logo -arch=amd64 -host_arch=amd64 && ${CMAKE_CMD} && ${BUILD_CMD} && ${INSTALL_CMD}")
-	echo "$COMSPEC" "//c" "${VSDEVCMD} -no_logo -arch=amd64 -host_arch=amd64 && ${CMAKE_CMD} && ${BUILD_CMD} && ${INSTALL_CMD}"
+	FULL_COMMAND=("$COMSPEC" "//c" "${VSDEVCMD} -no_logo -arch=${VS_TARGET_ARCH} -host_arch=${VS_HOST_ARCH} && ${CMAKE_CMD} && ${BUILD_CMD} && ${INSTALL_CMD}")
+	echo "$COMSPEC" "//c" "${VSDEVCMD} -no_logo -arch=${VS_TARGET_ARCH} -host_arch=${VS_HOST_ARCH} && ${CMAKE_CMD} && ${BUILD_CMD} && ${INSTALL_CMD}"
 else
 	# it's simpler without VS environment
 	CONFIGURE_COMMAND=("cmake" "${CMAKE_ARGS[@]}")
