@@ -1,0 +1,12 @@
+.DS_store
+/build
+/build_*
+/build-*
+/test_build
+shrimp-rules.md
+.mcp.json
+.claude/settings.local.json
+/sampledata
+/run_*
+/openvino_tests
+/.idea
