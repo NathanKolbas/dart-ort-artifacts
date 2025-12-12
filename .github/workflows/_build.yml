@@ -47,7 +47,7 @@ jobs:
             args: "--static --xnnpack --coreml -N"
             runs-on: macos-14
           - target: windows-aarch64-static
-            args: "--static -A aarch64 --directml --xnnpack --openvino -N"
+            args: "--static -A aarch64 --directml --xnnpack -N"
             runs-on: windows-2025
           - target: windows-x86_64-static
             args: "--static --directml --xnnpack --openvino -N"
@@ -93,7 +93,11 @@ jobs:
           swap-storage: true
 
       - name: Install cross-compilation tools
-        if: ((inputs.target-custom != '' && (inputs.target-custom == 'all' || contains(matrix.target, inputs.target-custom))) || (inputs.target-custom == '' && (inputs.target-preset == 'all' || contains(matrix.target, inputs.target-preset)))) && (matrix.target == 'linux-aarch64-dylib' || matrix.target == 'linux-aarch64-static')
+        if: >
+          (
+            (inputs.target-custom != '' && (inputs.target-custom == 'all' || contains(matrix.target, inputs.target-custom))) ||
+            (inputs.target-custom == '' && (inputs.target-preset == 'all' || contains(matrix.target, inputs.target-preset)))
+          ) && (matrix.target == 'linux-aarch64-static')
         run: |
           # Install basic build tools
           sudo apt update && sudo apt install -y make ninja-build wget xz-utils
@@ -110,26 +114,54 @@ jobs:
           sudo ln -sf /opt/linaro-toolchain/bin/aarch64-none-linux-gnu-g++ /usr/bin/aarch64-none-linux-gnu-g++
 
       - uses: actions/checkout@v4
-        if: (inputs.target-custom != '' && (inputs.target-custom == 'all' || contains(matrix.target, inputs.target-custom))) || (inputs.target-custom == '' && (inputs.target-preset == 'all' || contains(matrix.target, inputs.target-preset)))
+        if: >
+          (inputs.target-custom != '' && (inputs.target-custom == 'all' || contains(matrix.target, inputs.target-custom))) ||
+          (inputs.target-custom == '' && (inputs.target-preset == 'all' || contains(matrix.target, inputs.target-preset)))
 
       - uses: actions/setup-java@v4
-        if: ((inputs.target-custom != '' && (inputs.target-custom == 'all' || contains(matrix.target, inputs.target-custom))) || (inputs.target-custom == '' && (inputs.target-preset == 'all' || contains(matrix.target, inputs.target-preset)))) && (matrix.target == 'android-aarch64-dylib' || matrix.target == 'android-aarch64-static')
+        if: >
+          (
+            (inputs.target-custom != '' && (inputs.target-custom == 'all' || contains(matrix.target, inputs.target-custom))) ||
+            (inputs.target-custom == '' && (inputs.target-preset == 'all' || contains(matrix.target, inputs.target-preset)))
+          ) && (
+            matrix.target == 'android-aarch64-static' || matrix.target == 'android-armeabi-v7a-static' ||
+            matrix.target == 'android-x86_64-static' || matrix.target == 'android-x86-static'
+          )
         with:
           java-version: "17"
           distribution: "temurin"
 
       - uses: android-actions/setup-android@v3
-        if: ((inputs.target-custom != '' && (inputs.target-custom == 'all' || contains(matrix.target, inputs.target-custom))) || (inputs.target-custom == '' && (inputs.target-preset == 'all' || contains(matrix.target, inputs.target-preset)))) && (matrix.target == 'android-aarch64-dylib' || matrix.target == 'android-aarch64-static')
+        if: >
+          (
+            (inputs.target-custom != '' && (inputs.target-custom == 'all' || contains(matrix.target, inputs.target-custom))) ||
+            (inputs.target-custom == '' && (inputs.target-preset == 'all' || contains(matrix.target, inputs.target-preset)))
+          ) && (
+            matrix.target == 'android-aarch64-static' || matrix.target == 'android-armeabi-v7a-static' ||
+            matrix.target == 'android-x86_64-static' || matrix.target == 'android-x86-static'
+          )
 
       - uses: nttld/setup-ndk@v1
         id: setup-ndk
-        if: ((inputs.target-custom != '' && (inputs.target-custom == 'all' || contains(matrix.target, inputs.target-custom))) || (inputs.target-custom == '' && (inputs.target-preset == 'all' || contains(matrix.target, inputs.target-preset)))) && (matrix.target == 'android-aarch64-dylib' || matrix.target == 'android-aarch64-static')
+        if: >
+          (
+            (inputs.target-custom != '' && (inputs.target-custom == 'all' || contains(matrix.target, inputs.target-custom))) ||
+            (inputs.target-custom == '' && (inputs.target-preset == 'all' || contains(matrix.target, inputs.target-preset)))
+          ) && (
+            matrix.target == 'android-aarch64-static' || matrix.target == 'android-armeabi-v7a-static' ||
+            matrix.target == 'android-x86_64-static' || matrix.target == 'android-x86-static'
+          )
         with:
           add-to-path: false
           ndk-version: r28
 
       - uses: JW-AV/install-openvino-action@v10.1
-        if: contains(matrix.args, '--openvino') && ((inputs.target-custom != '' && (inputs.target-custom == 'all' || contains(matrix.target, inputs.target-custom))) || (inputs.target-custom == '' && (inputs.target-preset == 'all' || contains(matrix.target, inputs.target-preset))))
+        if: >
+          contains(matrix.args, '--openvino') &&
+          (
+            (inputs.target-custom != '' && (inputs.target-custom == 'all' || contains(matrix.target, inputs.target-custom))) ||
+            (inputs.target-custom == '' && (inputs.target-preset == 'all' || contains(matrix.target, inputs.target-preset)))
+          ) && (matrix.target != 'windows-aarch64-static')
         with:
           version: "2025.2"
           arch: ${{ contains(matrix.target, 'aarch64') && 'arm64' || 'x86_64' }}
@@ -154,8 +186,8 @@ jobs:
           (inputs.target-custom == '' && (inputs.target-preset == 'all' || contains(matrix.target, inputs.target-preset)))
         env:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
-          CMAKE_SYSROOT: ${{ (matrix.target == 'linux-aarch64-dylib' || matrix.target == 'linux-aarch64-static') && '/opt/linaro-toolchain/aarch64-none-linux-gnu/libc' || '' }}
-          CMAKE_FIND_ROOT_PATH: ${{ (matrix.target == 'linux-aarch64-dylib' || matrix.target == 'linux-aarch64-static') && '/opt/linaro-toolchain/aarch64-none-linux-gnu' || '' }}
+          CMAKE_SYSROOT: ${{ (matrix.target == 'linux-aarch64-static') && '/opt/linaro-toolchain/aarch64-none-linux-gnu/libc' || '' }}
+          CMAKE_FIND_ROOT_PATH: ${{ (matrix.target == 'linux-aarch64-static') && '/opt/linaro-toolchain/aarch64-none-linux-gnu' || '' }}
           TARGET_LINUX: ${{ contains(matrix.target, 'linux') && 'true' || 'false' }}
         shell: bash
         run: |
@@ -193,7 +225,9 @@ jobs:
 
       # Create archive based on target OS
       - name: Create artifact (.zip or .tar.gz)
-        if: (inputs.target-custom != '' && (inputs.target-custom == 'all' || contains(matrix.target, inputs.target-custom))) || (inputs.target-custom == '' && (inputs.target-preset == 'all' || contains(matrix.target, inputs.target-preset)))
+        if: >
+          (inputs.target-custom != '' && (inputs.target-custom == 'all' || contains(matrix.target, inputs.target-custom))) ||
+          (inputs.target-custom == '' && (inputs.target-preset == 'all' || contains(matrix.target, inputs.target-preset)))
         run: |
           if [[ "${{ matrix.target }}" == *windows* ]]; then
             pushd build/artifact
@@ -207,7 +241,9 @@ jobs:
         shell: bash
 
       - name: Upload artifact
-        if: (inputs.target-custom != '' && (inputs.target-custom == 'all' || contains(matrix.target, inputs.target-custom))) || (inputs.target-custom == '' && (inputs.target-preset == 'all' || contains(matrix.target, inputs.target-preset)))
+        if: >
+          (inputs.target-custom != '' && (inputs.target-custom == 'all' || contains(matrix.target, inputs.target-custom))) ||
+          (inputs.target-custom == '' && (inputs.target-preset == 'all' || contains(matrix.target, inputs.target-preset)))
         uses: actions/upload-artifact@v4
         with:
           name: ort-${{ inputs.onnxruntime-ref }}-${{ matrix.target }}-${{ steps.lower-buildtype.outputs.string }}

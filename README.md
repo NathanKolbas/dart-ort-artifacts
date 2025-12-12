@@ -19,14 +19,14 @@ Here is a matrix breakdown:
 [//]: # (https://onnxruntime.ai/docs/build/eps.html)
 [//]: # (CUDA, TensorRT, oneDNN, OpenVINO, QNN, DirectML, ACL, ANN, RKNPU, AMD Vitis AI, AMD MIGraphX, NNAPI, CoreML, XNNPACK, CANN, Azure)
 
-| Platform | Execution Providers         |
-|----------|-----------------------------|
-| Android  | NNAPI, XNNPACK              |
-| iOS      | CoreML, XNNPACK             |
-| Linux    | OpenVINO, XNNPACK           |
-| MacOS    | CoreML, XNNPACK             |
-| WASM     | WebGPU                      |
-| Windows  | DirectML, OpenVINO, XNNPACK |
+| Platform | Execution Providers                       |
+|----------|-------------------------------------------|
+| Android  | NNAPI, XNNPACK                            |
+| iOS      | CoreML, XNNPACK                           |
+| Linux    | OpenVINO, XNNPACK                         |
+| MacOS    | CoreML, XNNPACK                           |
+| WASM     | WebGPU                                    |
+| Windows  | DirectML, OpenVINO (x86_64 only), XNNPACK |
 
 ## Platform Breakdown
 
@@ -55,3 +55,5 @@ Add as needed.
 ### Windows
 
 Supports Windows 10 and 11.
+
+OpenVINO does not have builds for arm64. npm distribution states "Windows ARM is not supported".
