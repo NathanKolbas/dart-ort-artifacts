@@ -36,25 +36,25 @@ jobs:
         include:
           - target: linux-aarch64-static
             args: "--static -A aarch64 --xnnpack -N --openvino"
-            runs-on: ubuntu-22.04
+            runs-on: ubuntu-24.04
           - target: linux-x86_64-static
             args: "--static --xnnpack -N --openvino"
-            runs-on: ubuntu-22.04
+            runs-on: ubuntu-24.04
           - target: macos-aarch64-static
             args: "--static -A aarch64 --xnnpack --coreml -N"
             runs-on: macos-14
           - target: macos-x86_64-static
             args: "--static --xnnpack --coreml -N"
             runs-on: macos-14
-          - target: windows-aarch64-static
-            args: "--static -A aarch64 --directml --xnnpack -N"
-            runs-on: windows-2025
+#          - target: windows-aarch64-static
+#            args: "--static -A aarch64 --directml --xnnpack -N"
+#            runs-on: windows-2025
           - target: windows-x86_64-static
             args: "--static --directml --xnnpack --openvino -N"
             runs-on: windows-2025
           - target: emscripten-wasm32
             args: "-W --webgpu"
-            runs-on: ubuntu-22.04
+            runs-on: ubuntu-24.04
           - target: ios-aarch64-static
             args: "--static --iphoneos -A aarch64 --xnnpack --coreml -N"
             runs-on: macos-14
@@ -63,16 +63,16 @@ jobs:
             runs-on: macos-14
           - target: android-aarch64-static
             args: "--static --android -A aarch64 --xnnpack --nnapi -N"
-            runs-on: ubuntu-22.04
+            runs-on: ubuntu-24.04
           - target: android-armeabi-v7a-static
             args: "--static --android -A aarch64 --android_abi armeabi-v7a --xnnpack --nnapi -N"
-            runs-on: ubuntu-22.04
+            runs-on: ubuntu-24.04
           - target: android-x86_64-static
             args: "--static --android -A x86_64 --android_abi x86_64 --xnnpack --nnapi -N"
-            runs-on: ubuntu-22.04
+            runs-on: ubuntu-24.04
           - target: android-x86-static
             args: "--static --android -A x86_64 --android_abi x86 --xnnpack --nnapi -N"
-            runs-on: ubuntu-22.04
+            runs-on: ubuntu-24.04
 
     steps:
       - name: Free Disk Space (Ubuntu)

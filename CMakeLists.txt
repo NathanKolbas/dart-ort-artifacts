@@ -185,7 +185,7 @@ if(PLATFORM_WIN32)
 
     # ARM64 cross-compilation on Windows
     if(TARGET_ARCH STREQUAL "aarch64")
-        list(APPEND CMAKE_ARGS -Donnxruntime_CROSS_COMPILING=ON)
+        list(APPEND CMAKE_ARGS -Donnxruntime_CROSS_COMPILING=ON -A ARM64)
         list(APPEND COMPILER_FLAGS "D_SILENCE_ALL_CXX23_DEPRECATION_WARNINGS")
     endif()
 

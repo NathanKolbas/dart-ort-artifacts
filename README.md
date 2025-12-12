@@ -50,9 +50,11 @@ MacOS 13.3 or greater.
 
 ### WASM
 
-Add as needed.
+Comes bundled with WebGPU execution provider.
 
 ### Windows
+
+> ⚠️ ARM Support is disabled for the time being until build can be fixed.
 
 Supports Windows 10 and 11.
 
