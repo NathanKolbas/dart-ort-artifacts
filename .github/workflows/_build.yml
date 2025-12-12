@@ -47,7 +47,7 @@ jobs:
             args: "--static --xnnpack --coreml -N"
             runs-on: macos-14
           - target: windows-aarch64-static
-            args: "--static -A aarch64 --directml --xnnpack -N"
+            args: "--static -A aarch64 --directml --xnnpack"
             runs-on: windows-2025
           - target: windows-x86_64-static
             args: "--static --directml --xnnpack --openvino -N"
