@@ -78,7 +78,11 @@ if(USE_OPENVINO AND PLATFORM_DARWIN)
 endif()
 
 # Prepare patch command
-file(GLOB PATCH_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/all/*.patch)
+if(REFERENCE MATCHES "^v?1\\.22")
+    file(GLOB PATCH_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/all-v1.22/*.patch)
+else()
+    file(GLOB PATCH_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/all/*.patch)
+endif()
 list(SORT PATCH_FILES)
 set(PATCH_COMMAND "")
 foreach(PATCH_FILE ${PATCH_FILES})
