@@ -20,11 +20,14 @@ jobs:
       - name: Set build info
         id: build_info
         run: |
+          sha_short=$(git rev-parse --short HEAD)
+          echo "sha_short=${sha_short}" >> $GITHUB_OUTPUT
+          echo "sha_full=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
           echo "build_date=$(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_OUTPUT
           echo "repo_url=${{ github.server_url }}/${{ github.repository }}" >> $GITHUB_OUTPUT
           echo "job_url=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}" >> $GITHUB_OUTPUT
-          echo "release_name=ONNX Runtime ${{ inputs.onnxruntime-ref }} - ${{ github.ref_name }}" >> $GITHUB_OUTPUT
-          echo "release_tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          echo "release_name=ONNX Runtime ${{ inputs.onnxruntime-ref }} - ${sha_short}" >> $GITHUB_OUTPUT
+          echo "release_tag=ort-${{ inputs.onnxruntime-ref }}-${sha_short}" >> $GITHUB_OUTPUT
 
       - name: Download all artifacts
         uses: actions/download-artifact@v5
@@ -45,13 +48,13 @@ jobs:
           name: ${{ steps.build_info.outputs.release_name }}
           tag_name: ${{ steps.build_info.outputs.release_tag }}
           body: |
-            Pre-built ONNX Runtime libraries for various platforms.
+            Pre-built ONNX Runtime libraries for various platforms and [ort_dart](https://github.com/NathanKolbas/ort_dart).
 
             **Build Information:**
             - ONNX Runtime: `${{ inputs.onnxruntime-ref }}`
             - Build date: ${{ steps.build_info.outputs.build_date }}
             - Triggered by: @${{ github.actor }}
-            - Source: [${{ github.ref_name }}](${{ steps.build_info.outputs.repo_url }}/commit/${{ github.ref }})
+            - Source: [${{ steps.build_info.outputs.sha_short }}](${{ steps.build_info.outputs.repo_url }}/commit/${{ steps.build_info.outputs.sha_full }})
             - GitHub Actions job: [${{ steps.build_info.outputs.job_url }}](${{ steps.build_info.outputs.job_url }})
 
             Download `manifest.json` for SHA256 checksums and file locations.
@@ -60,3 +63,4 @@ jobs:
           files: |
             artifacts/**/*
             manifest.json
+            ort_dist.yaml
