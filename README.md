@@ -42,7 +42,7 @@ The minimum iOS version is 15. While you can go lower, this is best for performa
 
 ### Linux
 
-Add as needed.
+glibc ≥ 2.35 & libstdc++ >= 12 (Ubuntu ≥ 22.04, Debian ≥ 12 ‘Bookworm’)
 
 ### MacOS
 
@@ -50,7 +50,7 @@ MacOS 13.3 or greater.
 
 ### WASM
 
-Comes bundled with WebGPU execution provider.
+Comes bundled with the WebGPU execution provider.
 
 ### Windows
 
