@@ -1,0 +1,35 @@
+diff --git a/cmake/onnxruntime.cmake b/cmake/onnxruntime.cmake
+index e1d9810..8ee6a16 100644
+--- a/cmake/onnxruntime.cmake
++++ b/cmake/onnxruntime.cmake
+@@ -287,15 +291,16 @@ if(NOT APPLE AND NOT WIN32)
+   if(CMAKE_SYSTEM_NAME MATCHES "AIX")
+     set_target_properties(onnxruntime PROPERTIES
+       PUBLIC_HEADER "${ONNXRUNTIME_PUBLIC_HEADERS}"
+-      VERSION ${ORT_VERSION}
+-      SOVERSION 1
+-      FOLDER "ONNXRuntime")
++      # VERSION ${ORT_VERSION}
++      # SOVERSION 1
++      FOLDER "ONNXRuntime"
++    )
+   else()
+     set_target_properties(onnxruntime PROPERTIES
+       PUBLIC_HEADER "${ONNXRUNTIME_PUBLIC_HEADERS}"
+       LINK_DEPENDS ${SYMBOL_FILE}
+-      VERSION ${ORT_VERSION}
+-      SOVERSION 1
++      # VERSION ${ORT_VERSION}
++      # SOVERSION 1
+       FOLDER "ONNXRuntime")
+   endif()
+ else()
+@@ -303,7 +308,7 @@ else()
+   set_target_properties(onnxruntime PROPERTIES
+     PUBLIC_HEADER "${ONNXRUNTIME_PUBLIC_HEADERS}"
+     LINK_DEPENDS ${SYMBOL_FILE}
+-    VERSION ${ORT_VERSION}
++    # VERSION ${ORT_VERSION}
+     FOLDER "ONNXRuntime")
+ endif()
+ install(TARGETS onnxruntime

@@ -13,16 +13,11 @@ import yaml
 LIBRARY_DIRECTORIES = ["onnxruntime/bin", "onnxruntime/lib"]
 
 ONNXRUNTIME_LIBRARY_NAMES = {
-    "onnxruntime_sx.dll",
-    "onnxruntime_sxd.dll",
-    "libonnxruntime_sx.so",
-    "libonnxruntime_sxd.so",
-    "libonnxruntime_sx.dylib",
-    "libonnxruntime_sxd.dylib",
+    "onnxruntime.dll",
+    "libonnxruntime.so",
+    "libonnxruntime.dylib",
     "onnxruntime.lib",
-    "onnxruntimed.lib",
     "libonnxruntime.a",
-    "libonnxruntimed.a",
 }
 
 EXTRA_FILE_EXTENSIONS = (".dll", ".so", ".dylib", ".pdb")
