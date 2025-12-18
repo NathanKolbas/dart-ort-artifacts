@@ -138,8 +138,7 @@ function(bundle_static_library bundled_target_name)
     add_library(${bundled_target_name} STATIC IMPORTED GLOBAL)
     set_target_properties(${bundled_target_name}
         PROPERTIES
-        IMPORTED_LOCATION ${bundled_target_full_name}
-        DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
+        IMPORTED_LOCATION ${bundled_target_full_name})
 
     foreach(target_name IN ITEMS ${ARGN})
         set_property(TARGET ${bundled_target_name} APPEND
