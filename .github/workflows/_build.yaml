@@ -185,6 +185,7 @@ jobs:
           wget https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
           sudo ./llvm.sh 18
+          sudo apt-get install -y clang-18 clang-tools-18 lld-18
           echo "/usr/lib/llvm-18/bin" >> $GITHUB_PATH
           echo "CC=clang" >> $GITHUB_ENV
           echo "CXX=clang++" >> $GITHUB_ENV
