@@ -36,16 +36,17 @@ jobs:
         include:
           - target: linux-aarch64-static
             args: "--static -A aarch64 --xnnpack -N --openvino"
-            runs-on: ubuntu-24.04
+            runs-on: ubuntu-22.04
           - target: linux-x86_64-static
             args: "--static --xnnpack -N --openvino"
-            runs-on: ubuntu-24.04
+            runs-on: ubuntu-22.04
           - target: macos-aarch64-static
             args: "--static -A aarch64 --xnnpack --coreml -N"
             runs-on: macos-14
           - target: macos-x86_64-static
             args: "--static --xnnpack --coreml -N"
             runs-on: macos-14
+          # Windows ARM builds are broken: https://github.com/NathanKolbas/dart-ort-artifacts/issues/3
 #          - target: windows-aarch64-static
 #            args: "--static -A aarch64 --directml --xnnpack -N"
 #            runs-on: windows-2025
@@ -165,7 +166,7 @@ jobs:
         with:
           version: "2025.2"
           arch: ${{ contains(matrix.target, 'aarch64') && 'arm64' || 'x86_64' }}
-          release: ${{ (contains(matrix.target, 'linux') && (contains(matrix.target, 'aarch64') && 'ubuntu20' || 'ubuntu24') || 'ubuntu24') || '' }}
+          release: ${{ (contains(matrix.target, 'linux') && (contains(matrix.target, 'aarch64') && 'ubuntu20' || 'ubuntu22') || 'ubuntu22') || '' }}
 
       - name: Ubuntu GCC 11 setup
         if: contains(matrix.runs-on, 'ubuntu-24')
